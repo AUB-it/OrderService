@@ -19,9 +19,9 @@ public class OrderRepository : IOrderRepository
     public async Task CreateOrder(Order order)
     {
         // Ensure the order has a unique ID (create a new one if not set)
-        if (order.Orderid == Guid.Empty)
+        if (order.OrderId == Guid.Empty)
         {
-            order.Orderid = Guid.NewGuid();
+            order.OrderId = Guid.NewGuid();
         }
 
         await _orderCollection.InsertOneAsync(order);
@@ -29,12 +29,12 @@ public class OrderRepository : IOrderRepository
 
     public async Task DeleteOrder(Guid guid)
     {
-        await _orderCollection.DeleteOneAsync(order => order.Orderid == guid);
+        await _orderCollection.DeleteOneAsync(order => order.OrderId == guid);
     }
 
     public async Task<Order> GetOrder(Guid guid)
     {
-        return await _orderCollection.Find(order => order.Orderid == guid).FirstOrDefaultAsync();
+        return await _orderCollection.Find(order => order.OrderId == guid).FirstOrDefaultAsync();
     }
 
     public async Task<List<Order>> GetOrders()
@@ -45,8 +45,8 @@ public class OrderRepository : IOrderRepository
     public async Task<List<Order>> GetAllOrdersFromASpecificTimeFrame(DateTime OrderStartdate, DateTime OrderEndsdate)
     {
         return await _orderCollection.Find(order => 
-            order.OrderStartdate >= OrderStartdate && 
-            order.OrderEndDate <= OrderEndsdate)
+                order.OrderStartdate >= OrderStartdate && 
+                order.OrderEndDate <= OrderEndsdate)
             .ToListAsync();
     }
 
@@ -56,8 +56,8 @@ public class OrderRepository : IOrderRepository
         var tomorrow = today.AddDays(1);
         
         return await _orderCollection.Find(order => 
-            order.OrderStartdate >= today && 
-            order.OrderStartdate < tomorrow)
+                order.OrderStartdate >= today && 
+                order.OrderStartdate < tomorrow)
             .ToListAsync();
     }
 }
