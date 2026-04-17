@@ -1,13 +1,13 @@
 ﻿using System;
 using OrderService.Models;
-using OrderService.Repository.IOrderRepository;
+using OrderService.Repository;
 using MongoDB.Bson;
 using MongoDB.Driver;
 
 
 namespace OrderService.Repository;
 
-public class OrderRepository : IOrderRepository.IOrderRepository
+public class OrderRepository : IOrderRepository
 {
     private readonly IMongoCollection<Order> _orderCollection;
 
@@ -27,16 +27,14 @@ public class OrderRepository : IOrderRepository.IOrderRepository
         await _orderCollection.InsertOneAsync(order);
     }
 
-    public async Task DeleteOrder(int guid)
+    public async Task DeleteOrder(Guid guid)
     {
-        // Convert int to Guid for MongoDB query
-        await _orderCollection.DeleteOneAsync(order => order.Orderid == new Guid(guid.ToString().PadLeft(32, '0')));
+        await _orderCollection.DeleteOneAsync(order => order.Orderid == guid);
     }
 
-    public async Task<Order> GetOrder(int guid)
+    public async Task<Order> GetOrder(Guid guid)
     {
-        // Convert int to Guid for MongoDB query
-        return await _orderCollection.Find(order => order.Orderid == new Guid(guid.ToString().PadLeft(32, '0'))).FirstOrDefaultAsync();
+        return await _orderCollection.Find(order => order.Orderid == guid).FirstOrDefaultAsync();
     }
 
     public async Task<List<Order>> GetOrders()
