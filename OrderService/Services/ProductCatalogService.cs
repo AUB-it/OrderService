@@ -4,16 +4,18 @@ namespace OrderService.Services;
 
 public class ProductCatalogService
 {
-    private readonly HttpClient _httpClient;
+    private readonly IHttpClientFactory _httpClient;
 
-    public ProductCatalogService(HttpClient httpClient)
+    public ProductCatalogService(IHttpClientFactory httpClient)
     {
         _httpClient = httpClient;
     }
 
     public async Task<Orderitem?> GetProductByIdAsync(Guid productId)
     {
-        var response = await _httpClient.GetAsync($"catalog/{productId}");
+        var client = _httpClient.CreateClient("Catalog");
+        
+        var response = await client.GetAsync($"catalog/{productId}");
 
         if (!response.IsSuccessStatusCode)
             return null;

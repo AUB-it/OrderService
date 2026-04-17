@@ -42,11 +42,11 @@ public class OrderRepository : IOrderRepository
         return await _orderCollection.Find(order => true).ToListAsync();
     }
 
-    public async Task<List<Order>> GetAllOrdersFromASpecificTimeFrame(DateTime OrderStartdate, DateTime OrderEndsdate)
+    public async Task<List<Order>> GetAllOrdersFromASpecificTimeFrame(DateTime orderStartDate, DateTime orderEndsDate)
     {
         return await _orderCollection.Find(order => 
-                order.OrderStartdate >= OrderStartdate && 
-                order.OrderEndDate <= OrderEndsdate)
+                order.OrderStartdate <= orderEndsDate && 
+                order.OrderEndDate >= orderStartDate)
             .ToListAsync();
     }
 

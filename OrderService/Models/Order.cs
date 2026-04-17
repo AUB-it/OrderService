@@ -18,6 +18,9 @@ public class Order
 
 public class Orderitem
 {
+    [BsonId]
+    [BsonRepresentation(BsonType.String)]
+    
     public Guid ProductId { get; set; }
     public int Quantity { get; set; }
     public decimal Price { get; set; }

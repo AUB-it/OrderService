@@ -27,11 +27,15 @@ builder.Services.AddSingleton<IMongoCollection<OrderService.Models.Order>>(s =>
 });
 
 // Repository
-builder.Services.AddSingleton<IOrderRepository, OrderRepository>();
+builder.Services.AddScoped<IOrderRepository, OrderRepository>();
+builder.Services.AddScoped<ProductCatalogService>();
 
 // CatalogService HTTP klient
-builder.Services.AddHttpClient<ProductCatalogService>(c =>
-    c.BaseAddress = new Uri("http://localhost:5125"));
+builder.Services.AddHttpClient("Catalog", client =>
+{
+    client.BaseAddress = new Uri("http://localhost:5125");
+});
+
 
 var app = builder.Build();
 
